@@ -1,0 +1,76 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}znczz{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='znc.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='znc.ico') }}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">智能车制作</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.index') }}">首页</a></li>
+                <li><a href="/">智能车零配件导购</a></li>
+                <li><a href="/">技术报告</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">                    
+                    <img class="img-rounded profile-thumbnail" src="../static/plusone.png" width="20" height="20" style="float:left; margin-top:15px">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="float:left">{{ current_user.username }}<b class="caret"></b></a>                    
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{ url_for('main.user', username=current_user.username) }}">
+                            Profile
+                            </a>
+                        </li>
+                        <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
+                        <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% block page_content %}{% endblock %} 
+</div>
+<div style="text-align:center; margin-top:50px">
+    <div style="margin:0 auto; height:1px; width:90%; background-color:#B4CDCD"></div>
+    <div style="height:5px"></div>
+    <a href='/' style="text-decoration:none;">Powered by PlusOne</a>
+    <div style="height:20px"></div>
+</div>
+{% endblock %}

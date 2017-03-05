@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}智能车制作 - 第十二届竞赛广场{% endblock %}
+
+{% block page_content %}
+<div class="page-header">   
+    <h1>第十二届竞赛广场</h1>
+</div>
+
+{% include '_posts.html' %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'note.twelve') }}
+</div>
+
+<div class="form">
+    {% if current_user.can(Permission.WRITE_ARTICLES) %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

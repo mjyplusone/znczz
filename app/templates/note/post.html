@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}智能车制作 - Post{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% block page_content %}
+    {% include '_posts.html' %}
+    {% endblock %} 
+</div>
+<div class="navbar-fixed-bottom" style="text-align:center; margin-top:50px">
+    <div style="margin:0 auto; height:1px; width:90%; background-color:#B4CDCD"></div>
+    <div style="height:5px"></div>
+    <a href='/' style="text-decoration:none;">Powered by PlusOne</a>
+    <div style="height:20px"></div>
+</div>
+{% endblock %}
