@@ -19,7 +19,7 @@ class EditProfileAdminForm(Form):
     username=StringField('Username', validators=[Required(), Length(1, 64), 
                                                  Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Usernames must have only letters, numbers, dots or underscores')])
     confirmed=BooleanField('Confirmed')
-    role=SelectField('Role', coerce=int)
+    role=SelectField('Role')
     name=StringField('Real name', validators=[Length(0 ,64)])
     location=StringField('Location', validators=[Length(0, 64)])
     about_me=TextAreaField('About me')
@@ -27,8 +27,9 @@ class EditProfileAdminForm(Form):
     
     def __init__(self, user, *args, **kwargs):
         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
-        self.role.choices=[(role.id, role.name)
-                            for role in Role.query.order_by(Role.name).all()]
+        self.role.choices=[('User', 'User'),('Administrator', 'Administrator')]
+        for forum in Forum.query.order_by(Forum.id).all():
+            self.role.choices.append(('Moderator of '+forum.name, 'Moderator of '+forum.name))
         self.user=user
         
     def validate_email(self, field):

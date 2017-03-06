@@ -20,9 +20,8 @@ class Role(db.Model):
     def insert_roles():
         roles={
             'User':(Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES | Permission.DELETE, True),
-            'Moderator_12':(Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES | Permission.DELETE | Permission.MODERATE_COMMENTS |Permission.MODERATE_DELETE | Permission.MODERATE_12, False),
-            'Moderator_11':(Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES | Permission.DELETE | Permission.MODERATE_COMMENTS |Permission.MODERATE_DELETE | Permission.MODERATE_11, False),
-            'Administrator': (0xffff, False)
+            'Moderator':(Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES | Permission.DELETE | Permission.MODERATE_COMMENTS |Permission.MODERATE_DELETE, False),
+            'Administrator': (0xff, False)
         }
         for r in roles:
             role=Role.query.filter_by(name=r).first()
@@ -37,15 +36,13 @@ class Role(db.Model):
         return '<Role %r>' % self.name
         
 class Permission:
-    FOLLOW=0x0001
-    COMMENT=0x0002
-    WRITE_ARTICLES=0x0004
-    DELETE=0x0008
-    MODERATE_COMMENTS=0x0010  
-    MODERATE_DELETE=0x0020
-    MODERATE_12=0x0040
-    MODERATE_11=0x0080
-    ADMINISTER=0x8000
+    FOLLOW=0x01
+    COMMENT=0x02
+    WRITE_ARTICLES=0x04
+    DELETE=0x08
+    MODERATE_COMMENTS=0x10  
+    MODERATE_DELETE=0x20
+    ADMINISTER=0x80
         
 class User(db.Model, UserMixin):
     __tablename__='users'
@@ -61,12 +58,13 @@ class User(db.Model, UserMixin):
     member_since=db.Column(db.DateTime(), default=datetime.utcnow())
     last_seen=db.Column(db.DateTime(), default=datetime.utcnow())
     posts=db.relationship('Post', backref='author', lazy='dynamic')
+    forum_id=db.Column(db.Integer, db.ForeignKey('forums.id'))
     
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
             if self.email==current_app.config['FLASKY_ADMIN']:
-                self.role=Role.query.filter_by(permissions=0xffff).first()
+                self.role=Role.query.filter_by(permissions=0xff).first()
             if self.role is None:
                 self.role=Role.query.filter_by(default=True).first()
                 
@@ -76,12 +74,6 @@ class User(db.Model, UserMixin):
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
-        
-    def is_moderator_12(self):
-        return self.can(Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES | Permission.DELETE | Permission.MODERATE_COMMENTS |Permission.MODERATE_DELETE | Permission.MODERATE_12)
-        
-    def is_moderator_11(self):
-        return self.can(Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES | Permission.DELETE | Permission.MODERATE_COMMENTS |Permission.MODERATE_DELETE | Permission.MODERATE_11)
         
     def ping(self):
         self.last_seen=datetime.utcnow()
@@ -233,6 +225,7 @@ class Forum(db.Model):
     order=db.Column(db.Integer)
     color=db.Column(db.String(64), default='red')
     posts=db.relationship('Post', backref='subforum', lazy='dynamic')
+    users=db.relationship('User', backref='subforum', lazy='dynamic')
     
     @staticmethod
     def insert_forums():

@@ -10,10 +10,8 @@
             {{ user.username }}
             {% if user.is_administrator() %}
             <button class="btn btn-danger" style="float:right">Admin</button>
-            {% elif user.is_moderator_12() %}
-            <button class="btn btn-danger" style="float:right">Moderator of the Twelfth</button>
-            {% elif user.is_moderator_11() %}
-            <button class="btn btn-danger" style="float:right">Moderator of the Eleventh</button>
+            {% elif user.subforum!=None %}                
+            <button class="btn btn-danger" style="float:right">Moderator of {{ user.subforum.name }}</button>          
             {% endif %}
         </h1>
     </div>

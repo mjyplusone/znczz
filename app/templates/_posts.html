@@ -28,7 +28,7 @@
                 <a href="{{ url_for('note.delete', id=post.id) }}">
                     <span class="label label-primary">Delete</span>
                 </a>
-                {% elif current_user.is_authenticated and (current_user.is_administrator() or (subforum.name=='twelve' and current_user.is_moderator_12()) or (subforum.name=='eleven' and current_user.is_moderator_11()))%}
+                {% elif current_user.is_administrator() or subforum.name==current_user.subforum.name %}
                 <a href="{{ url_for('note.edit', id=post.id) }}">
                     <span class="label label-danger">Edit[Admin]</span>
                 </a>
