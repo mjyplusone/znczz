@@ -5,56 +5,36 @@ from .forms import PostForm
 from .. import db
 from ..models import User, Role, Post, Permission, Forum
 
-@note.route('/twelve', methods=['GET', 'POST'])
-def twelve():
+@note.route('/subforum/<int:id>', methods=['GET', 'POST'])
+def subforum(id):
+    subforum = Forum.query.get_or_404(id)
     form=PostForm()
     if current_user.can(Permission.WRITE_ARTICLES) and \
             form.validate_on_submit():
         post=Post(body=form.body.data, 
                   author=current_user._get_current_object(),
-                  subforum=Forum.query.filter_by(name='twelve').first())
+                  subforum=subforum)
         db.session.add(post)
-        return redirect(url_for('note.twelve'))
+        return redirect(url_for('note.subforum', id=subforum.id))
     page = request.args.get('page', 1, type=int)
-    twelve_forum=Forum.query.filter_by(name='twelve').first()
-    pagination = Post.query.filter_by(subforum=twelve_forum).order_by(Post.timestamp.desc()).paginate(page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
+    pagination = Post.query.filter_by(subforum=subforum).order_by(Post.timestamp.desc()).paginate(page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
     posts = pagination.items
-    endpoint = 'note.twelve'
-    return render_template('note/twelve.html', form=form, posts=posts, pagination=pagination, endpoint=endpoint)
-    
-@note.route('/eleven', methods=['GET', 'POST'])
-def eleven():
-    form=PostForm()
-    if current_user.can(Permission.WRITE_ARTICLES) and \
-            form.validate_on_submit():
-        post=Post(body=form.body.data, 
-                  author=current_user._get_current_object(),
-                  subforum=Forum.query.filter_by(name='eleven').first())
-        db.session.add(post)
-        return redirect(url_for('note.eleven'))
-    page = request.args.get('page', 1, type=int)
-    eleven_forum=Forum.query.filter_by(name='eleven').first()
-    pagination = Post.query.filter_by(subforum=eleven_forum).order_by(Post.timestamp.desc()).paginate(page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
-    posts = pagination.items
-    endpoint = 'note.eleven'
-    return render_template('note/eleven.html', form=form, posts=posts, pagination=pagination, endpoint=endpoint)
+    return render_template('note/subforum.html', form=form, subforum=subforum, posts=posts, pagination=pagination)
     
 @note.route('/post/<int:id>')
 def post(id):
     post = Post.query.get_or_404(id)
-    return render_template('note/post.html', posts=[post])
+    subforum=post.subforum
+    return render_template('note/post.html', posts=[post], subforum=subforum)
     
 @note.route('/edit/<int:id>',methods=['GET', 'POST'])
 @login_required
 def edit(id):
     post=Post.query.get_or_404(id)
-    if post.subforum.name=='twelve':
-        endpoint='note.twelve'
-    elif post.subforum.name=='eleven':
-        endpoint='note.eleven'
+    subforum=post.subforum
     if (current_user!=post.author and not current_user.can(Permission.ADMINISTER)) and \
-            (endpoint=='note.twelve' and not current_user.is_moderator_12()) and \
-            (endpoint=='note.eleven' and not current_user.is_moderator_11()):
+            (subforum.name=='twelve' and not current_user.is_moderator_12()) and \
+            (subforum.name=='eleven' and not current_user.is_moderator_11()):
         abort(403)
     form=PostForm()
     if form.validate_on_submit():
@@ -69,15 +49,12 @@ def edit(id):
 @login_required
 def delete(id):
     post=Post.query.get_or_404(id)
-    if post.subforum.name=='twelve':
-        endpoint='note.twelve'
-    elif post.subforum.name=='eleven':
-        endpoint='note.eleven'
+    subforum=post.subforum
     if (current_user!=post.author and not current_user.can(Permission.ADMINISTER)) and \
-            (endpoint=='note.twelve' and not current_user.is_moderator_12()) and \
-            (endpoint=='note.eleven' and not current_user.is_moderator_11()):
+            (subforum.name=='twelve' and not current_user.is_moderator_12()) and \
+            (subforum.name=='eleven' and not current_user.is_moderator_11()):
         abort(403)
     db.session.delete(post)
     flash('The post has been deleted.')
-    return redirect(url_for(endpoint))
+    return redirect(url_for('note.subforum', id=subforum.id))
     

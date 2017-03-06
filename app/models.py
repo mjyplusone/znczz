@@ -229,6 +229,9 @@ class Forum(db.Model):
     __tablename__='forums'
     id=db.Column(db.Integer, primary_key=True)
     name=db.Column(db.String(64), unique=True)
+    forumname=db.Column(db.String(64), unique=True)
+    order=db.Column(db.Integer)
+    color=db.Column(db.String(64), default='red')
     posts=db.relationship('Post', backref='subforum', lazy='dynamic')
     
     @staticmethod

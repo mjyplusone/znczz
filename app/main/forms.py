@@ -2,7 +2,7 @@ from flask_wtf import Form
 from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField
 from wtforms.validators import Required, Length, Email, Regexp
 from wtforms import ValidationError
-from ..models import Role, User
+from ..models import Role, User, Post, Forum
 
 class NameForm(Form):
     name = StringField('What is your name?', validators=[Required()])
@@ -40,3 +40,23 @@ class EditProfileAdminForm(Form):
         if field.data!=self.user.username and \
                 user.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+            
+class AddSubforumForm(Form):
+    name=StringField('Route Name', validators=[Required(), Length(1, 64)])
+    forumname=StringField('SubForum Name', validators=[Required(), Length(1, 64)])
+    color=SelectField('Title Color', validators=[Required()], choices=[('red', 'red'),('brown', 'brown'),('green', 'green'),('orange', 'orange')] )
+    submit=SubmitField('Submit')
+   
+    
+class DeleteSubforumForm(Form):
+    forum=SelectField('Delete Name', coerce=int)
+    submit=SubmitField('Submit')
+    
+    def __init__(self, *args, **kwargs):
+        super(DeleteSubforumForm, self).__init__(*args, **kwargs)
+        self.forum.choices=[(forum.id, forum.forumname)
+                            for forum in Forum.query.order_by(Forum.id).all()]
+                            
+                            
+                            
+                            

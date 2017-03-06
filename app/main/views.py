@@ -1,15 +1,21 @@
 from datetime import datetime
 from flask import render_template, redirect, url_for, session, flash
 from . import main
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm
+from .forms import NameForm, EditProfileForm, EditProfileAdminForm, AddSubforumForm, DeleteSubforumForm
 from .. import db
-from ..models import User, Role, Post, Permission
+from ..models import User, Role, Post, Permission, Forum
 from flask_login import login_required, current_user
 from ..decorators import admin_required, permission_required
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    forum_num=Forum.query.count()
+    forums=Forum.query.all()
+    num=1
+    for forum in forums:
+        forum.order=num
+        num=num+1
+    return render_template('index.html',forum_num=forum_num, forums=forums)
     
 @main.route('/user/<username>')
 def user(username):
@@ -61,7 +67,33 @@ def edit_profile_admin(id):
     form.about_me.data = user.about_me
     return render_template('edit_profile.html', form=form, user=user)    
     
+@main.route('/addsubforum', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def addsubforum():
+    form=AddSubforumForm()
+    if form.validate_on_submit():
+        forum=Forum(name=form.name.data, forumname=form.forumname.data, color=form.color.data)
+        db.session.add(forum)
+        db.session.commit()
+        flash('New subforum has been added.')
+        return redirect(url_for('.index'))
+    return render_template('add_subforum.html', form=form)
     
+@main.route('/deletesubforum', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def deletesubforum():  
+    form=DeleteSubforumForm()  
+    if form.validate_on_submit():
+        delforum=Forum.query.get(form.forum.data)
+        for post in delforum.posts:
+            db.session.delete(post)
+        db.session.delete(delforum)
+        db.session.commit()
+        flash('The subforum has been deleted.')
+        return redirect(url_for('.index'))
+    return render_template('delete_subforum.html', form=form)  
     
     
     

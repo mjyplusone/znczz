@@ -5,127 +5,92 @@
 {% block page_content %}
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">恩智浦(飞思卡尔)智能车竞赛</h3>
+            <h3 class="panel-title">恩智浦(飞思卡尔)智能车竞赛
+            {% if current_user.is_administrator() %}
+            <span class="label label-danger" href='/' style="float:right"><a href="{{ url_for('main.addsubforum') }}" style="text-decoration:none; color:#FFFFFF">Add SubForum[Admin]</a></span>
+            <span class="label label-danger" href='/' style="float:right; margin-right:10px"><a href="{{ url_for('main.deletesubforum') }}" style="text-decoration:none; color:#FFFFFF">Delete SubForum[Admin]</a></span>
+            {% endif %}
+            </h3>
         </div>
-        <div class="panel-body" style="padding-left:30px; padding-right:30px">                      
-            <div class="row" >
+        <div class="panel-body" style="padding-left:30px; padding-right:30px">   
+          
+            {% for forum in forums %}
+                {% if forum.query.count()==1 %}
+                <div class="row" >
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
+                        <div class="index_text">
+                            <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
+                            <div>帖数:</div>
+                            <div>最后发表:</div>
+                        </div>
+                    </div>
+                </div>
+                {% elif forum.order==1 %}
+                <div class="row" >
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
+                        <div class="index_text">
+                            <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
+                            <div>帖数:</div>
+                            <div>最后发表:</div>
+                        </div>
+                    </div>
+                {% elif forum.order%4==1 and forum.order!=1 and forum.order==forum.query.count() %}
+                <hr style="border:1px dashed" color="#DDDDDD"> 
+                <div class="row" >   
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
+                        <div class="index_text">
+                            <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
+                            <div>帖数:</div>
+                            <div>最后发表:</div>
+                        </div>
+                    </div>
+                </div>
+                {% elif forum.order%4==1 and forum.order!=1 %}
+                <hr style="border:1px dashed" color="#DDDDDD"> 
+                <div class="row" >      
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
+                        <div class="index_text">
+                            <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
+                            <div>帖数:</div>
+                            <div>最后发表:</div>
+                        </div>
+                    </div>
+                {% elif forum.order==forum.query.count() %}
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
+                        <div class="index_text">
+                            <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
+                            <div>帖数:</div>
+                            <div>最后发表:</div>
+                        </div>
+                    </div>
+                </div>
+                {% elif forum.order%4==0 %}
+                    <div class="col-xs-6 col-sm-3">
+                        <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
+                        <div class="index_text">
+                            <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
+                            <div>帖数:</div>
+                            <div>最后发表:</div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
                 <div class="col-xs-6 col-sm-3">
                     <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                     <div class="index_text">
-                        <a class="index_title_race" href="{{ url_for('note.twelve') }}">第十二届竞赛广场</a>
+                        <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
                         <div>帖数:</div>
                         <div>最后发表:</div>
                     </div>
                 </div>
-                
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_race" href="{{ url_for('note.eleven') }}">第十一届竞赛回顾</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-         
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_race" href="/">第十届竞赛回顾</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-                
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_data" href="/">历届赛况资料讨论</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-            </div> 
-
-            <hr style="border:1px dashed" color="#DDDDDD"> 
-            
-            <div class="row" >
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_type" href="/">追逐类</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-                
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_type" href="/">直立类</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-         
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_type" href="/">四轮类</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-                
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_type" href="/">双车对抗</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-            </div>  
-            
-            <hr style="border:1px dashed" color="#DDDDDD"> 
-            
-            <div class="row" >
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_other" href="/">恩智浦(飞思卡尔)微控制器</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-                
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_other" href="/">智能车基础知识</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-         
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_other" href="/">智能车商家服务</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-                
-                <div class="col-xs-6 col-sm-3">
-                    <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
-                    <div class="index_text">
-                        <a class="index_title_other" href="/">智能车技术报告下载</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
-                    </div>
-                </div>
-            </div>  
-            
+                {% endif %}        
+            {% endfor %}
+                 
         </div>
     </div>
     <div class="panel panel-primary">
