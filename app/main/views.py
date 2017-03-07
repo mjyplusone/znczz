@@ -15,7 +15,7 @@ def index():
     for forum in forums:
         forum.order=num
         num=num+1
-    return render_template('index.html',forum_num=forum_num, forums=forums)
+    return render_template('index.html',forum_num=forum_num, forums=forums, Post=Post)
     
 @main.route('/user/<username>')
 def user(username):

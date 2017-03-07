@@ -21,8 +21,12 @@
                         <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                         <div class="index_text">
                             <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
-                            <div>帖数:</div>
-                            <div>最后发表:</div>
+                            <div>帖数:{{ forum.posts.count() }}</div>
+                            <div>最后发表:
+                            {% if forum.posts.count()!=0 %}
+                            {{ moment(forum.posts.order_by(Post.timestamp.desc()).first().timestamp).fromNow() }}
+                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -32,8 +36,12 @@
                         <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                         <div class="index_text">
                             <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
-                            <div>帖数:</div>
-                            <div>最后发表:</div>
+                            <div>帖数:{{ forum.posts.count() }}</div>
+                            <div>最后发表:
+                            {% if forum.posts.count()!=0 %}
+                            {{ moment(forum.posts.order_by(Post.timestamp.desc()).first().timestamp).fromNow() }}
+                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% elif forum.order%4==1 and forum.order!=1 and forum.order==forum.query.count() %}
@@ -43,8 +51,12 @@
                         <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                         <div class="index_text">
                             <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
-                            <div>帖数:</div>
-                            <div>最后发表:</div>
+                            <div>帖数:{{ forum.posts.count() }}</div>
+                            <div>最后发表:
+                            {% if forum.posts.count()!=0 %}
+                            {{ moment(forum.posts.order_by(Post.timestamp.desc()).first().timestamp).fromNow() }}
+                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,8 +67,12 @@
                         <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                         <div class="index_text">
                             <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
-                            <div>帖数:</div>
-                            <div>最后发表:</div>
+                            <div>帖数:{{ forum.posts.count() }}</div>
+                            <div>最后发表:
+                            {% if forum.posts.count()!=0 %}
+                            {{ moment(forum.posts.order_by(Post.timestamp.desc()).first().timestamp).fromNow() }}
+                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% elif forum.order==forum.query.count() %}
@@ -64,8 +80,12 @@
                         <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                         <div class="index_text">
                             <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
-                            <div>帖数:</div>
-                            <div>最后发表:</div>
+                            <div>帖数:{{ forum.posts.count() }}</div>
+                            <div>最后发表:
+                            {% if forum.posts.count()!=0 %}
+                            {{ moment(forum.posts.order_by(Post.timestamp.desc()).first().timestamp).fromNow() }}
+                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,8 +94,12 @@
                         <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                         <div class="index_text">
                             <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
-                            <div>帖数:</div>
-                            <div>最后发表:</div>
+                            <div>帖数:{{ forum.posts.count() }}</div>
+                            <div>最后发表:
+                            {% if forum.posts.count()!=0 %}
+                            {{ moment(forum.posts.order_by(Post.timestamp.desc()).first().timestamp).fromNow() }}
+                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -84,8 +108,12 @@
                     <a href="/"><img src="../static/index/index_bubble.gif" class="img-responsive index_img"></a>
                     <div class="index_text">
                         <a class="{{ forum.color }}" href="{{ url_for('note.subforum', id=forum.id) }}">{{ forum.forumname }}</a>
-                        <div>帖数:</div>
-                        <div>最后发表:</div>
+                        <div>帖数:{{ forum.posts.count() }}</div>
+                        <div>最后发表:
+                        {% if forum.posts.count()!=0 %}
+                        {{ moment(forum.posts.order_by(Post.timestamp.desc()).first().timestamp).fromNow() }}
+                        {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endif %}        
@@ -98,7 +126,7 @@
             <h3 class="panel-title">大学生电子设计大赛</h3>
         </div>
         <div class="panel-body">
-            这是一个基本的面板
+            我比较懒，这里就不做了~
         </div>
     </div>
     <div class="panel panel-primary">
@@ -106,7 +134,7 @@
             <h3 class="panel-title">外围扩展</h3>
         </div>
         <div class="panel-body">
-            这是一个基本的面板
+            我比较懒，这里就不做了~
         </div>
     </div>
     <div class="panel panel-primary">
@@ -114,7 +142,7 @@
             <h3 class="panel-title">其他智能车</h3>
         </div>
         <div class="panel-body">
-            这是一个基本的面板
+            我比较懒，这里就不做了~
         </div>
     </div>
     <div class="panel panel-primary">
@@ -122,7 +150,7 @@
             <h3 class="panel-title">技术工具专区</h3>
         </div>
         <div class="panel-body">
-            这是一个基本的面板
+            我比较懒，这里就不做了~
         </div>
     </div>
 {% endblock %}
