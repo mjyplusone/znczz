@@ -33,6 +33,9 @@
                 <li><a href="/">技术报告</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                {% if current_user.can(Permission.MODERATE_COMMENTS) %}
+                <li><a href="{{ url_for('note.moderate') }}">Moderate Comments</a></li>
+                {% endif %}
                 {% if current_user.is_authenticated %}
                 <li class="dropdown">                    
                     <img class="img-rounded profile-thumbnail" src="../static/plusone.png" width="20" height="20" style="float:left; margin-top:15px">

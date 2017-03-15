@@ -28,7 +28,7 @@
                 <a href="{{ url_for('note.delete', id=post.id) }}">
                     <span class="label label-primary">Delete</span>
                 </a>
-                {% elif current_user.is_authenticated and (current_user.is_administrator() or subforum.name==current_user.subforum.name) %}
+                {% elif current_user.is_authenticated and subforum!=None and (current_user.is_administrator() or subforum.name==current_user.subforum.name) %}
                 <a href="{{ url_for('note.edit', id=post.id) }}">
                     <span class="label label-danger">Edit[Admin]</span>
                 </a>
@@ -38,6 +38,11 @@
                 {% endif %}
                 <a href="{{ url_for('note.post', id=post.id) }}">
                     <span class="label label-default">Permalink</span>
+                </a>
+                <a href="{{ url_for('note.post', id=post.id) }}#comments">
+                    <span class="label label-primary">
+                        {{ post.comments.count() }} Comments
+                    </span>
                 </a>
             </div>
         </div>
