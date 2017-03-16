@@ -29,7 +29,7 @@ class EditProfileAdminForm(Form):
         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
         self.role.choices=[('User', 'User'),('Administrator', 'Administrator')]
         for forum in Forum.query.order_by(Forum.id).all():
-            self.role.choices.append(('Moderator of '+forum.name, 'Moderator of '+forum.name))
+            self.role.choices.append(('Moderator of '+forum.name, 'Moderator of '+forum.forumname))
         self.user=user
         
     def validate_email(self, field):
@@ -57,7 +57,13 @@ class DeleteSubforumForm(Form):
         super(DeleteSubforumForm, self).__init__(*args, **kwargs)
         self.forum.choices=[(forum.id, forum.forumname)
                             for forum in Forum.query.order_by(Forum.id).all()]
+                                               
                             
-                            
-                            
-                            
+    
+
+
+
+
+
+
+    

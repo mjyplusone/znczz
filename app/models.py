@@ -263,7 +263,7 @@ class Forum(db.Model):
     forumname=db.Column(db.String(64), unique=True)
     color=db.Column(db.String(64), default='red')
     posts=db.relationship('Post', backref='subforum', lazy='dynamic')
-    users=db.relationship('User', backref='subforum', lazy='dynamic')
+    users=db.relationship('User', backref='subforum', uselist=False)    # one to one
     
     @staticmethod
     def insert_forums():
@@ -274,7 +274,7 @@ class Forum(db.Model):
                 forum=Forum(name=r)
             db.session.add(forum)
         db.session.commit()
-    
+ 
 class Comment(db.Model):
     __tablename__='comments'
     id=db.Column(db.Integer, primary_key=True)

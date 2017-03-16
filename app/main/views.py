@@ -56,7 +56,8 @@ def edit_profile_admin(id):
             user.role=Role.query.filter_by(name='Moderator').first()
             user.subforum=Forum.query.filter_by(name=new_role[13:]).first()
         else:
-            user.role=Role.query.get(form.role.data)
+            user.role=Role.query.filter_by(name=form.role.data).first()
+            user.subforum=None
         
         db.session.add(user)
         flash('The profile has been updated.')
@@ -97,6 +98,9 @@ def deletesubforum():
         delforum=Forum.query.get(form.forum.data)
         for post in delforum.posts:
             db.session.delete(post)
+        for user in delforum.users:
+            user.role=Role.query.filter_by(name='User').first()
+        db.session.add(user)
         db.session.delete(delforum)
         db.session.commit()
         flash('The subforum has been deleted.')

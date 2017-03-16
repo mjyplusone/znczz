@@ -11,7 +11,7 @@
             {% if user.is_administrator() %}
             <button class="btn btn-danger" style="float:right">Admin</button>
             {% elif user.subforum!=None %}                
-            <button class="btn btn-danger" style="float:right">Moderator of {{ user.subforum.name }}</button>          
+            <a href="{{ url_for('note.subforum', id=user.subforum.id) }}"><button class="btn btn-danger" style="float:right">Moderator of {{ user.subforum.name }}</button></a>          
             {% endif %}
         </h1>
     </div>
